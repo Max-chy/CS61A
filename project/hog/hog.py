@@ -235,7 +235,7 @@ def announce_lead_changes(last_leader=None):
     Player 0 takes the lead by 2
     """
     def say(score0, score1):
-        if score0 > score1:
+        if score0 > score1: 
             leader = 0
         elif score1 > score0:
             leader = 1
@@ -346,6 +346,14 @@ def make_averaged(original_function, trials_count=1000):
     """
     # BEGIN PROBLEM 8
     "*** YOUR CODE HERE ***"
+    def average(*args):
+        sum = 0
+        for i in range(trials_count):
+            sum += original_function(*args)
+        return sum / trials_count
+    return average
+
+
     # END PROBLEM 8
 
 
@@ -360,6 +368,18 @@ def max_scoring_num_rolls(dice=six_sided, trials_count=1000):
     """
     # BEGIN PROBLEM 9
     "*** YOUR CODE HERE ***"
+    t = 0
+    max_avr, max_t = 0, 0
+    while t < 10:
+        t += 1
+        averaged_dice = make_averaged(roll_dice, trials_count)
+        avr = averaged_dice(t, dice)
+        if avr > max_avr:
+            max_avr = avr
+            max_t = t
+            # print("max_avr", max_avr, "max_t", max_t)
+    return max_t
+        
     # END PROBLEM 9
 
 
@@ -409,7 +429,11 @@ def bacon_strategy(score, opponent_score, cutoff=8, num_rolls=6):
     rolls NUM_ROLLS otherwise.
     """
     # BEGIN PROBLEM 10
-    return 6  # Replace this statement
+    if free_bacon(opponent_score) >= cutoff:
+        return 0
+    else:
+        return num_rolls
+    # Replace this statement
     # END PROBLEM 10
 
 
@@ -419,6 +443,13 @@ def extra_turn_strategy(score, opponent_score, cutoff=8, num_rolls=6):
     Otherwise, it rolls NUM_ROLLS.
     """
     # BEGIN PROBLEM 11
+    if bacon_strategy(score, opponent_score, cutoff, num_rolls) == 0:
+        return 0
+    else:
+        if extra_turn(score + free_bacon(opponent_score), opponent_score) == True:
+            return 0
+        else:
+            return num_rolls
     return 6  # Replace this statement
     # END PROBLEM 11
 
